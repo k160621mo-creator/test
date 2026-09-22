@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>展覽施工背板智慧報價系統</title>
+  
+  <!-- PWA 設定 -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="背板報價">
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent-gold: #f59e0b;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --input-bg: #0f172a;
+      --input-border: #475569;
+    }
+
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text-main); margin: 0; padding: 12px; font-size: 14px; }
+    .container { max-width: 760px; margin: 0 auto; }
+
+    /* Header & Navigation */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 4px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    header h1 { font-size: 1.15rem; margin: 0; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .nav-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    /* Cards & Layout */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+      margin-top: 0;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .col { flex: 1; min-width: 140px; }
+    .col-full { width: 100%; }
+
+    label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
+    input, select {
+      width: 100%;
+      padding: 9px 11px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    input:focus, select:focus { border-color: var(--primary); }
+
+    /* Segment Table Input */
+    .segment-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .btn-icon { background: var(--card-border); border: none; color: #fff; border-radius: 6px; padding: 8px 12px; cursor: pointer; }
+    .btn-danger { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+
+    /* Action Buttons */
+    .btn-primary {
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 11px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    /* Output Table */
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.85rem; }
+    th, td { padding: 8px 6px; text-align: left; border-bottom: 1px solid var(--card-border); }
+    th { color: var(--text-muted); font-weight: 500; }
+    .text-right { text-align: right; }
+    .text-center { text-align: center; }
+
+    .total-box {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+    .total-row { display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 4px; }
+    .grand-total { font-size: 1.15rem; font-weight: bold; color: var(--accent-green); border-top: 1px solid rgba(16, 185, 129, 0.2); padding-top: 6px; margin-top: 6px; }
+
+    /* Modal / Auth Area */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 360px;
+    }
+
+    .badge-info {
+      font-size: 0.75rem;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🛠️ 施工背板報價系統</h1>
+    <button class="nav-btn" id="adminToggleBtn" onclick="openLoginModal()">⚙️ 後台單價管理</button>
+  </header>
+
+  <!-- 報價計算區 -->
+  <main id="viewCalculator">
+    <div class="card">
+      <div class="card-title">1. 客戶別與背板材質</div>
+      <div class="row">
+        <div class="col">
+          <label>客戶類別 (決定價格層級)</label>
+          <select id="clientType" onchange="calculate()">
+            <option value="cash">現金牌價</option>
+            <option value="m5k">會員 (五千牌價)</option>
+            <option value="m30k_1">會員 (三萬牌價 - 第一級)</option>
+            <option value="m30k_2">會員 (三萬牌價 - 第二級)</option>
+            <option value="m100k">會員 (十萬牌價)</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>背板/貼紙材質</label>
+          <select id="materialType" onchange="calculate()">
+            <option value="oilMatte">油白霧</option>
+            <option value="milkMatte">乳白霧</option>
+            <option value="board5mmStd">5MM高優質合成版</option>
+            <option value="board5mm300">5MM 300CM合成版</option>
+            <option value="board5mmGloss">5MM亮面合成版</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        2. 背板尺寸段數 (高 x 寬 cm)
+        <button class="nav-btn" onclick="addSegmentRow()" style="padding: 2px 8px; font-size:0.75rem;">+ 增加段數</button>
+      </div>
+      <div class="badge-info">💡 系統會自動精算才數與貼紙損耗才數</div>
+      <div id="segmentContainer"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">3. 施工、撤場與配件費用</div>
+      <div class="row">
+        <div class="col">
+          <label><input type="checkbox" id="chkInstall" checked onchange="calculate()"> 包含施工費</label>
+        </div>
+        <div class="col">
+          <label><input type="checkbox" id="chkRemove" checked onchange="calculate()"> 包含撤場費</label>
+        </div>
+        <div class="col">
+          <label><input type="checkbox" id="chkWaste" checked onchange="calculate()"> 廢棄物處理費</label>
+        </div>
+      </div>
+      
+      <div class="row" style="margin-top: 10px;">
+        <div class="col">
+          <label>L鐵架 150CM (個)</label>
+          <input type="number" id="stand150" value="0" min="0" oninput="calculate()">
+        </div>
+        <div class="col">
+          <label>L鐵架 180CM (個)</label>
+          <input type="number" id="stand180" value="0" min="0" oninput="calculate()">
+        </div>
+        <div class="col">
+          <label>L鐵架 225CM (個)</label>
+          <input type="number" id="stand225" value="0" min="0" oninput="calculate()">
+        </div>
+      </div>
+    </div>
+
+    <!-- 報價單結果 -->
+    <div class="card">
+      <div class="card-title">📋 報價明細總覽</div>
+      <table>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th class="text-center">數量/才數</th>
+            <th class="text-right">單價</th>
+            <th class="text-right">小計</th>
+          </tr>
+        </thead>
+        <tbody id="quoteDetailTable"></tbody>
+      </table>
+
+      <div class="total-box">
+        <div class="total-row"><span>實際施工總才數：</span><span id="txtActualSqft">0 才</span></div>
+        <div class="total-row"><span>貼紙計費總才數 (含損耗)：</span><span id="txtBillSqft">0 才</span></div>
+        <div class="total-row"><span>未稅總價：</span><span id="txtSubtotal">$0</span></div>
+        <div class="total-row"><span>營業稅 (5%)：</span><span id="txtTax">$0</span></div>
+        <div class="total-row grand-total"><span>含稅報價金額：</span><span id="txtGrandTotal">$0</span></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 後台單價管理頁面 (密碼保護) -->
+  <main id="viewAdmin" style="display: none;">
+    <div class="card">
+      <div class="card-title">
+        ⚙️ 後台單價與基本價設定
+        <button class="nav-btn" onclick="closeAdmin()">返回前台報價</button>
+      </div>
+      <div id="adminPriceForms"></div>
+      <button class="btn-primary" onclick="saveAdminPrices()">💾 儲存並更新所有價格資料</button>
+    </div>
+  </main>
+</div>
+
+<!-- 登入 Modal -->
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <h3 style="margin-top:0; color:#fff;">🔐 管理者身份驗證</h3>
+    <label>請輸入管理密碼 (預設: admin888)</label>
+    <input type="password" id="adminPassword" style="margin-top:6px; margin-bottom:12px;">
+    <button class="btn-primary" onclick="verifyAdmin()">登入後台</button>
+    <button class="btn-primary" style="background:transparent; border:1px solid var(--card-border); margin-top:6px;" onclick="closeLoginModal()">取消</button>
+  </div>
+</div>
+
+<script>
+// 1. 預設單價矩陣 (localStorage 會繼承與更新此結構)
+const DEFAULT_PRICES = {
+  materials: {
+    cash:     { oilMatte: 16.0, milkMatte: 23.0, board5mmStd: 14.0, board5mm300: 16.0, board5mmGloss: 19.0, install: 15.0, installMin: 1800, remove: 10.0, removeMin: 1200, waste: 8.0 },
+    m5k:      { oilMatte: 15.9, milkMatte: 22.0, board5mmStd: 12.0, board5mm300: 14.0, board5mmGloss: 18.0, install: 14.0, installMin: 1800, remove: 10.0, removeMin: 1000, waste: 6.0 },
+    m30k_1:  { oilMatte: 15.7, milkMatte: 19.3, board5mmStd: 12.0, board5mm300: 14.0, board5mmGloss: 18.0, install: 14.0, installMin: 1800, remove: 10.0, removeMin: 1000, waste: 6.0 },
+    m30k_2:  { oilMatte: 15.5, milkMatte: 18.9, board5mmStd: 12.0, board5mm300: 14.0, board5mmGloss: 18.0, install: 14.0, installMin: 1800, remove: 10.0, removeMin: 1000, waste: 6.0 },
+    m100k:   { oilMatte: 15.0, milkMatte: 18.4, board5mmStd: 12.0, board5mm300: 14.0, board5mmGloss: 18.0, install: 14.0, installMin: 1800, remove: 10.0, removeMin: 1000, waste: 6.0 }
+  },
+  stands: {
+    cash: { s150: 170, s180: 205, s225: 250 },
+    member: { s150: 160, s180: 195, s225: 240 }
+  }
+};
+
+let db = JSON.parse(localStorage.getItem('board_app_prices')) || DEFAULT_PRICES;
+
+// 初始化預設 2 段背板輸入框
+let segmentCount = 0;
+window.onload = function() {
+  addSegmentRow(240, 90);
+  addSegmentRow(240, 90);
+  calculate();
+};
+
+function addSegmentRow(defaultH = 240, defaultW = 90) {
+  segmentCount++;
+  const container = document.getElementById('segmentContainer');
+  const div = document.createElement('div');
+  div.className = 'segment-row';
+  div.id = `segRow_${segmentCount}`;
+  div.innerHTML = `
+    <span style="font-weight:bold; color:var(--text-muted); width:45px;">第${segmentCount}段</span>
+    <input type="number" placeholder="高(cm)" value="${defaultH}" class="seg-h" oninput="calculate()">
+    <span>x</span>
+    <input type="number" placeholder="寬(cm)" value="${defaultW}" class="seg-w" oninput="calculate()">
+    <button class="btn-icon btn-danger" onclick="removeSegmentRow(${segmentCount})">✕</button>
+  `;
+  container.appendChild(div);
+  calculate();
+}
+
+function removeSegmentRow(id) {
+  const row = document.getElementById(`segRow_${id}`);
+  if (row) {
+    row.remove();
+    calculate();
+  }
+}
+
+// 核心計算邏輯
+function calculate() {
+  const clientKey = document.getElementById('clientType').value;
+  const matKey = document.getElementById('materialType').value;
+  const priceConfig = db.materials[clientKey];
+
+  // 1. 蒐集段數尺寸
+  const hInputs = document.querySelectorAll('.seg-h');
+  const wInputs = document.querySelectorAll('.seg-w');
+  
+  let totalActualSqft = 0;
+  let totalBilledSqft = 0;
+  let segmentDetails = [];
+  let segTotalCount = 0;
+
+  hInputs.forEach((hEl, idx) => {
+    const h = parseFloat(hEl.value) || 0;
+    const w = parseFloat(wInputs[idx].value) || 0;
+    if (h > 0 && w > 0) {
+      segTotalCount++;
+      const sqft = (h * w) / 900; // 1才 = 30cm x 30cm = 900 cm²
+      totalActualSqft += sqft;
+
+      // 損耗判定邏輯：
+      // 乳性墨水 (milkMatte)：每段 110cm 以內(含)才要計算損耗 (不足110cm以110cm計)
+      // 油性墨水 (oilMatte)：若有 3 段以上(含)，即要算耗損 (不足部分每段算耗損)
+      let billW = w;
+      if (matKey === 'milkMatte') {
+        if (w <= 110) billW = Math.max(w, 110);
+      }
+      
+      const billedSqftOfSeg = (h * billW) / 900;
+      totalBilledSqft += billedSqftOfSeg;
+
+      segmentDetails.push({ h, w, billW, sqft, billedSqftOfSeg });
+    }
+  });
+
+  // 油性 3 段以上全採耗損補滿邏輯處理
+  if (matKey === 'oilMatte' && segTotalCount >= 3) {
+    totalBilledSqft = 0;
+    segmentDetails.forEach(s => {
+      // 若寬度不足基本幅寬(如 90/110/120)，補算才數損耗
+      let targetW = s.w < 90 ? 90 : s.w; 
+      totalBilledSqft += (s.h * targetW) / 900;
+    });
+  }
+
+  // 四捨五入取至整數才數或保留1位小數
+  const actualSqftCalc = Math.ceil(totalActualSqft);
+  const billedSqftCalc = Math.ceil(totalBilledSqft);
+
+  // 價格結算
+  const matUnitPrice = priceConfig[matKey];
+  const matCost = billedSqftCalc * matUnitPrice;
+
+  // 施工/撤場/廢物
+  const doInstall = document.getElementById('chkInstall').checked;
+  const doRemove = document.getElementById('chkRemove').checked;
+  const doWaste = document.getElementById('chkWaste').checked;
+
+  let installCost = 0;
+  if (doInstall) {
+    installCost = Math.max(actualSqftCalc * priceConfig.install, priceConfig.installMin);
+  }
+
+  let removeCost = 0;
+  if (doRemove) {
+    removeCost = Math.max(actualSqftCalc * priceConfig.remove, priceConfig.removeMin);
+  }
+
+  let wasteCost = 0;
+  if (doWaste) {
+    wasteCost = actualSqftCalc * priceConfig.waste;
+  }
+
+  // 鐵腳架
+  const isMember = clientKey !== 'cash';
+  const standPrices = isMember ? db.stands.member : db.stands.cash;
+  const num150 = parseInt(document.getElementById('stand150').value) || 0;
+  const num180 = parseInt(document.getElementById('stand180').value) || 0;
+  const num225 = parseInt(document.getElementById('stand225').value) || 0;
+
+  const standCost = (num150 * standPrices.s150) + (num180 * standPrices.s180) + (num225 * standPrices.s225);
+
+  // 總計
+  const subtotal = matCost + installCost + removeCost + wasteCost + standCost;
+  const tax = Math.round(subtotal * 0.05);
+  const grandTotal = subtotal + tax;
+
+  // 渲染報價表格
+  const matNames = {
+    oilMatte: '油白霧貼紙+背板',
+    milkMatte: '乳白霧貼紙+背板',
+    board5mmStd: '5MM高優質合成版',
+    board5mm300: '5MM 300CM合成版',
+    board5mmGloss: '5MM亮面合成版'
+  };
+
+  let html = `
+    <tr><td>${matNames[matKey]}</td><td class="text-center">${billedSqftCalc} 才</td><td class="text-right">$${matUnitPrice}</td><td class="text-right">$${Math.round(matCost).toLocaleString()}</td></tr>
+  `;
+
+  if (doInstall) {
+    html += `<tr><td>現場施工費 (基本價$${priceConfig.installMin})</td><td class="text-center">${actualSqftCalc} 才</td><td class="text-right">$${priceConfig.install}</td><td class="text-right">$${Math.round(installCost).toLocaleString()}</td></tr>`;
+  }
+  if (doRemove) {
+    html += `<tr><td>活動撤場費 (基本價$${priceConfig.removeMin})</td><td class="text-center">${actualSqftCalc} 才</td><td class="text-right">$${priceConfig.remove}</td><td class="text-right">$${Math.round(removeCost).toLocaleString()}</td></tr>`;
+  }
+  if (doWaste) {
+    html += `<tr><td>廢棄物清運費</td><td class="text-center">${actualSqftCalc} 才</td><td class="text-right">$${priceConfig.waste}</td><td class="text-right">$${Math.round(wasteCost).toLocaleString()}</td></tr>`;
+  }
+  if (standCost > 0) {
+    html += `<tr><td>L型鐵腳架支援 (150/180/225cm)</td><td class="text-center">-</td><td class="text-right">-</td><td class="text-right">$${standCost.toLocaleString()}</td></tr>`;
+  }
+
+  document.getElementById('quoteDetailTable').innerHTML = html;
+  document.getElementById('txtActualSqft').innerText = `${actualSqftCalc} 才`;
+  document.getElementById('txtBillSqft').innerText = `${billedSqftCalc} 才 (${matKey==='oilMatte'&&segTotalCount>=3?'含油性多段損耗':'含損耗才'})`;
+  document.getElementById('txtSubtotal').innerText = `$${Math.round(subtotal).toLocaleString()}`;
+  document.getElementById('txtTax').innerText = `$${tax.toLocaleString()}`;
+  document.getElementById('txtGrandTotal').innerText = `$${Math.round(grandTotal).toLocaleString()}`;
+}
+
+// 後台管理邏輯
+function openLoginModal() {
+  document.getElementById('loginModal').style.display = 'flex';
+}
+function closeLoginModal() {
+  document.getElementById('loginModal').style.display = 'none';
+}
+
+function verifyAdmin() {
+  const pwd = document.getElementById('adminPassword').value;
+  if (pwd === 'admin888') { // 預設密碼
+    closeLoginModal();
+    document.getElementById('viewCalculator').style.display = 'none';
+    document.getElementById('viewAdmin').style.display = 'block';
+    renderAdminForm();
+  } else {
+    alert('密碼錯誤！(預設密碼為: admin888)');
+  }
+}
+
+function closeAdmin() {
+  document.getElementById('viewAdmin').style.display = 'none';
+  document.getElementById('viewCalculator').style.display = 'block';
+  calculate();
+}
+
+function renderAdminForm() {
+  const container = document.getElementById('adminPriceForms');
+  let html = '';
+
+  const clientLabels = {
+    cash: '現金牌價',
+    m5k: '會員 (五千牌價)',
+    m30k_1: '會員 (三萬牌價 - 第一級)',
+    m30k_2: '會員 (三萬牌價 - 第二級)',
+    m100k: '會員 (十萬牌價)'
+  };
+
+  for (let key in db.materials) {
+    const item = db.materials[key];
+    html += `
+      <div style="border-bottom: 1px solid var(--card-border); padding-bottom: 10px; margin-bottom: 10px;">
+        <h4 style="color:var(--accent-gold); margin:6px 0;">${clientLabels[key]}</h4>
+        <div class="row">
+          <div class="col"><label>油白霧</label><input type="number" step="0.1" id="adm_${key}_oilMatte" value="${item.oilMatte}"></div>
+          <div class="col"><label>乳白霧</label><input type="number" step="0.1" id="adm_${key}_milkMatte" value="${item.milkMatte}"></div>
+          <div class="col"><label>5MM高優質</label><input type="number" step="0.1" id="adm_${key}_board5mmStd" value="${item.board5mmStd}"></div>
+          <div class="col"><label>5MM 300CM</label><input type="number" step="0.1" id="adm_${key}_board5mm300" value="${item.board5mm300}"></div>
+          <div class="col"><label>5MM亮面</label><input type="number" step="0.1" id="adm_${key}_board5mmGloss" value="${item.board5mmGloss}"></div>
+        </div>
+        <div class="row">
+          <div class="col"><label>施工費/才</label><input type="number" id="adm_${key}_install" value="${item.install}"></div>
+          <div class="col"><label>施工基本價</label><input type="number" id="adm_${key}_installMin" value="${item.installMin}"></div>
+          <div class="col"><label>撤場費/才</label><input type="number" id="adm_${key}_remove" value="${item.remove}"></div>
+          <div class="col"><label>撤場基本價</label><input type="number" id="adm_${key}_removeMin" value="${item.removeMin}"></div>
+          <div class="col"><label>廢棄物/才</label><input type="number" id="adm_${key}_waste" value="${item.waste}"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  // 鐵架設定
+  html += `
+    <h4 style="color:var(--accent-gold); margin:10px 0;">鐵腳架單價設定</h4>
+    <div class="row">
+      <div class="col"><label>現金 - 150cm</label><input type="number" id="adm_stand_cash_150" value="${db.stands.cash.s150}"></div>
+      <div class="col"><label>現金 - 180cm</label><input type="number" id="adm_stand_cash_180" value="${db.stands.cash.s180}"></div>
+      <div class="col"><label>現金 - 225cm</label><input type="number" id="adm_stand_cash_225" value="${db.stands.cash.s225}"></div>
+    </div>
+    <div class="row">
+      <div class="col"><label>會員 - 150cm</label><input type="number" id="adm_stand_member_150" value="${db.stands.member.s150}"></div>
+      <div class="col"><label>會員 - 180cm</label><input type="number" id="adm_stand_member_180" value="${db.stands.member.s180}"></div>
+      <div class="col"><label>會員 - 225cm</label><input type="number" id="adm_stand_member_225" value="${db.stands.member.s225}"></div>
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+function saveAdminPrices() {
+  for (let key in db.materials) {
+    db.materials[key].oilMatte = parseFloat(document.getElementById(`adm_${key}_oilMatte`).value);
+    db.materials[key].milkMatte = parseFloat(document.getElementById(`adm_${key}_milkMatte`).value);
+    db.materials[key].board5mmStd = parseFloat(document.getElementById(`adm_${key}_board5mmStd`).value);
+    db.materials[key].board5mm300 = parseFloat(document.getElementById(`adm_${key}_board5mm300`).value);
+    db.materials[key].board5mmGloss = parseFloat(document.getElementById(`adm_${key}_board5mmGloss`).value);
+    
+    db.materials[key].install = parseFloat(document.getElementById(`adm_${key}_install`).value);
+    db.materials[key].installMin = parseFloat(document.getElementById(`adm_${key}_installMin`).value);
+    db.materials[key].remove = parseFloat(document.getElementById(`adm_${key}_remove`).value);
+    db.materials[key].removeMin = parseFloat(document.getElementById(`adm_${key}_removeMin`).value);
+    db.materials[key].waste = parseFloat(document.getElementById(`adm_${key}_waste`).value);
+  }
+
+  db.stands.cash.s150 = parseFloat(document.getElementById('adm_stand_cash_150').value);
+  db.stands.cash.s180 = parseFloat(document.getElementById('adm_stand_cash_180').value);
+  db.stands.cash.s225 = parseFloat(document.getElementById('adm_stand_cash_225').value);
+
+  db.stands.member.s150 = parseFloat(document.getElementById('adm_stand_member_150').value);
+  db.stands.member.s180 = parseFloat(document.getElementById('adm_stand_member_180').value);
+  db.stands.member.s225 = parseFloat(document.getElementById('adm_stand_member_225').value);
+
+  localStorage.setItem('board_app_prices', JSON.stringify(db));
+  alert('單價資料已儲存成功！');
+  closeAdmin();
+}
+</script>
+</body>
+</html>
