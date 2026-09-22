@@ -1,638 +1,316 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>展覽施工背板智慧報價系統</title>
-  
-  <!-- PWA 設定 -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f172a">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="背板報價">
-
-  <style>
-    :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --card-border: #334155;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
-      --accent-gold: #f59e0b;
-      --accent-green: #10b981;
-      --accent-red: #ef4444;
-      --input-bg: #0f172a;
-      --input-border: #475569;
-    }
-
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--bg); color: var(--text-main); margin: 0; padding: 12px; font-size: 14px; }
-    .container { max-width: 760px; margin: 0 auto; }
-
-    /* Header & Navigation */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 4px;
-      margin-bottom: 12px;
-      border-bottom: 1px solid var(--card-border);
-    }
-    header h1 { font-size: 1.15rem; margin: 0; color: #fff; display: flex; align-items: center; gap: 8px; }
-    .nav-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
-
-    /* Auth Screen (Login / Register) */
-    .auth-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 80vh;
-    }
-    .auth-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 28px 24px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      text-align: center;
-    }
-    .auth-title { font-size: 1.4rem; font-weight: bold; color: #fff; margin-bottom: 6px; }
-    .auth-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; }
-    
-    .tab-group {
-      display: flex;
-      background: var(--input-bg);
-      padding: 4px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      border: 1px solid var(--card-border);
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 8px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-    }
-    .tab-btn.active { background: var(--primary); color: #fff; }
-
-    /* Cards & Form Components */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 14px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-    .card-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--accent-gold);
-      margin-top: 0;
-      margin-bottom: 12px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid var(--card-border);
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-    .col { flex: 1; min-width: 140px; }
-
-    label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; text-align: left; }
-    input, select {
-      width: 100%;
-      padding: 10px 12px;
-      background: var(--input-bg);
-      border: 1px solid var(--input-border);
-      border-radius: 6px;
-      color: #fff;
-      font-size: 0.9rem;
-      outline: none;
-      margin-bottom: 10px;
-    }
-    input:focus, select:focus { border-color: var(--primary); }
-
-    .segment-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
-    .btn-icon { background: var(--card-border); border: none; color: #fff; border-radius: 6px; padding: 8px 12px; cursor: pointer; }
-    .btn-danger { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
-
-    .btn-primary {
-      width: 100%;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 11px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-    .btn-primary:hover { background: var(--primary-hover); }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.85rem; }
-    th, td { padding: 8px 6px; text-align: left; border-bottom: 1px solid var(--card-border); }
-    th { color: var(--text-muted); font-weight: 500; }
-    .text-right { text-align: right; }
-    .text-center { text-align: center; }
-
-    .total-box {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      border-radius: 8px;
-      padding: 12px;
-      margin-top: 12px;
-    }
-    .total-row { display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 4px; }
-    .grand-total { font-size: 1.15rem; font-weight: bold; color: var(--accent-green); border-top: 1px solid rgba(16, 185, 129, 0.2); padding-top: 6px; margin-top: 6px; }
-
-    .user-tag {
-      font-size: 0.8rem;
-      background: rgba(59, 130, 246, 0.2);
-      color: #60a5fa;
-      padding: 4px 8px;
-      border-radius: 6px;
-      margin-right: 8px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3789百方 - 專業雲端報價與管理系統</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
 
-<div class="container">
-  <!-- 第一階段：首頁登入/註冊畫面 -->
-  <main id="viewAuth" class="auth-container">
-    <div class="auth-card">
-      <div style="font-size: 2.5rem; margin-bottom: 8px;">🛠️</div>
-      <div class="auth-title">背板智慧報價系統</div>
-      <div class="auth-subtitle">請登入帳號以開始計算與管理單價</div>
+    <!-- ==================== 1. 首頁 (Landing Page) ==================== -->
+    <div id="page-landing" class="page-section flex-1 flex flex-col">
+        <!-- 首頁導覽列 -->
+        <nav class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center font-bold text-white text-xl shadow-lg shadow-sky-500/20">
+                        37
+                    </div>
+                    <span class="font-bold text-xl tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
+                        3789百方
+                    </span>
+                </div>
+                <div>
+                    <button onclick="navigateTo('page-login')" class="px-5 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-medium transition duration-200 shadow-md shadow-sky-600/30">
+                        登入系統 <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
 
-      <div class="tab-group">
-        <button class="tab-btn active" id="btnTabLogin" onclick="switchAuthTab('login')">會員登入</button>
-        <button class="tab-btn" id="btnTabRegister" onclick="switchAuthTab('register')">註冊帳號</button>
-      </div>
+        <!-- 首頁 Hero 區域 -->
+        <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-center text-center py-16">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-400 text-sm mb-8">
+                <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+                全新改版 2.0 雲端估價模組上線
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight max-w-4xl leading-tight mb-6">
+                精準算料與智慧報價，<br><span class="bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-indigo-400">專為專業展覽與大型輸出打造</span>
+            </h1>
+            <p class="text-slate-400 text-lg sm:text-xl max-w-2xl mb-10 leading-relaxed">
+                整合大圖輸出材積計算、耗損自動換算、背板施工與差旅運費規則。彈性設定、即時生成報價，提升團隊作業效率。
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                <button onclick="navigateTo('page-login')" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-semibold text-lg shadow-lg shadow-sky-500/25 transition duration-200">
+                    立即體驗系統
+                </button>
+                <a href="#features" class="px-8 py-3.5 rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-800 text-slate-300 font-semibold text-lg transition duration-200">
+                    了解更多功能
+                </a>
+            </div>
 
-      <!-- 登入表單 -->
-      <form id="formLogin" onsubmit="handleLogin(event)">
-        <label>使用者帳號</label>
-        <input type="text" id="loginUser" placeholder="請輸入帳號" required>
-        <label>密碼</label>
-        <input type="password" id="loginPass" placeholder="請輸入密碼" required>
-        <button type="submit" class="btn-primary">進入系統</button>
-      </form>
-
-      <!-- 註冊表單 -->
-      <form id="formRegister" onsubmit="handleRegister(event)" style="display: none;">
-        <label>設定使用者帳號</label>
-        <input type="text" id="regUser" placeholder="設定使用者帳號" required>
-        <label>設定密碼</label>
-        <input type="password" id="regPass" placeholder="設定密碼" required>
-        <button type="submit" class="btn-primary" style="background: var(--accent-green);">完成註冊並登入</button>
-      </form>
-    </div>
-  </main>
-
-  <!-- 第二階段：主報價介面 (登入後顯示) -->
-  <main id="viewApp" style="display: none;">
-    <header>
-      <h1>🛠️ 施工背板報價系統</h1>
-      <div>
-        <span class="user-tag" id="currentUserDisplay">👤 User</span>
-        <button class="nav-btn" onclick="openAdmin()">⚙️ 後台設定</button>
-        <button class="nav-btn" onclick="handleLogout()" style="color: var(--accent-red);">登出</button>
-      </div>
-    </header>
-
-    <div class="card">
-      <div class="card-title">1. 客戶別與背板材質</div>
-      <div class="row">
-        <div class="col">
-          <label>客戶類別 (決定價格層級)</label>
-          <select id="clientType" onchange="calculate()">
-            <option value="cash">現金牌價</option>
-            <option value="m5k">會員 (五千牌價)</option>
-            <option value="m30k_1">會員 (三萬牌價 - 第一級)</option>
-            <option value="m30k_2">會員 (三萬牌價 - 第二級)</option>
-            <option value="m100k">會員 (十萬牌價)</option>
-          </select>
-        </div>
-        <div class="col">
-          <label>背板/貼紙材質</label>
-          <select id="materialType" onchange="calculate()">
-            <option value="oilMatte">油白霧</option>
-            <option value="milkMatte">乳白霧</option>
-            <option value="board5mmStd">5MM高優質合成版</option>
-            <option value="board5mm300">5MM 300CM合成版</option>
-            <option value="board5mmGloss">5MM亮面合成版</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        2. 背板尺寸段數 (高 x 寬 cm)
-        <button class="nav-btn" onclick="addSegmentRow()" style="padding: 2px 8px; font-size:0.75rem;">+ 增加段數</button>
-      </div>
-      <div id="segmentContainer"></div>
+            <!-- 特色卡片 -->
+            <div id="features" class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mt-20 text-left">
+                <div class="p-6 rounded-2xl border border-slate-800 bg-slate-800/40">
+                    <div class="w-12 h-12 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">自動化耗損換算</h3>
+                    <p class="text-slate-400 text-sm">輸入尺寸自動試算才數與基本耗損，降低人工報價誤差與成本風險。</p>
+                </div>
+                <div class="p-6 rounded-2xl border border-slate-800 bg-slate-800/40">
+                    <div class="w-12 h-12 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">場地施工與進退場</h3>
+                    <p class="text-slate-400 text-sm">預設展覽館及雙北區域運費規範，自動判斷差旅與搬運加價條件。</p>
+                </div>
+                <div class="p-6 rounded-2xl border border-slate-800 bg-slate-800/40">
+                    <div class="w-12 h-12 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">雲端離線持久化</h3>
+                    <p class="text-slate-400 text-sm">支援本地端快取與離線報價試算，資料不遺失，隨時隨地輕鬆調閱。</p>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <div class="card">
-      <div class="card-title">3. 施工、撤場與配件費用</div>
-      <div class="row">
-        <div class="col">
-          <label><input type="checkbox" id="chkInstall" checked onchange="calculate()"> 包含施工費</label>
+    <!-- ==================== 2. 登入歡迎畫面 (Login / Welcome Page) ==================== -->
+    <div id="page-login" class="page-section hidden flex-1 flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-slate-800/80 border border-slate-700/80 rounded-2xl p-8 shadow-2xl backdrop-blur relative">
+            <button onclick="navigateTo('page-landing')" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center font-bold text-white text-3xl shadow-xl shadow-sky-500/30 mx-auto mb-4">
+                    37
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-1">歡迎回來</h2>
+                <p class="text-slate-400 text-sm">請登入您的帳號以進入 3789百方 系統</p>
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-1">使用者帳號</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="username" value="汪政均" required class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-white placeholder-slate-500 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-1">密碼</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="password" value="••••••••" required class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-white placeholder-slate-500 transition">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-sm">
+                    <label class="flex items-center text-slate-400 cursor-pointer">
+                        <input type="checkbox" checked class="rounded border-slate-700 bg-slate-900 text-sky-500 focus:ring-sky-500">
+                        <span class="ml-2">記住我的登入</span>
+                    </label>
+                    <a href="#" class="text-sky-400 hover:underline">忘記密碼？</a>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-sky-500/25 transition duration-200">
+                    進入系統內部 <i class="fa-solid fa-right-to-bracket ml-1"></i>
+                </button>
+            </form>
+
+            <div class="mt-6 text-center text-xs text-slate-500">
+                預設管理者帳號已填入，可以直接點擊登入。
+            </div>
         </div>
-        <div class="col">
-          <label><input type="checkbox" id="chkRemove" checked onchange="calculate()"> 包含撤場費</label>
-        </div>
-        <div class="col">
-          <label><input type="checkbox" id="chkWaste" checked onchange="calculate()"> 廢棄物處理費</label>
-        </div>
-      </div>
-      
-      <div class="row" style="margin-top: 10px;">
-        <div class="col">
-          <label>L鐵架 150CM (個)</label>
-          <input type="number" id="stand150" value="0" min="0" oninput="calculate()">
-        </div>
-        <div class="col">
-          <label>L鐵架 180CM (個)</label>
-          <input type="number" id="stand180" value="0" min="0" oninput="calculate()">
-        </div>
-        <div class="col">
-          <label>L鐵架 225CM (個)</label>
-          <input type="number" id="stand225" value="0" min="0" oninput="calculate()">
-        </div>
-      </div>
     </div>
 
-    <!-- 報價總覽區 -->
-    <div class="card">
-      <div class="card-title">📋 報價明細總覽</div>
-      <table>
-        <thead>
-          <tr>
-            <th>項目</th>
-            <th class="text-center">數量/才數</th>
-            <th class="text-right">單價</th>
-            <th class="text-right">小計</th>
-          </tr>
-        </thead>
-        <tbody id="quoteDetailTable"></tbody>
-      </table>
+    <!-- ==================== 3. 系統內部主頁 (System Dashboard) ==================== -->
+    <div id="page-dashboard" class="page-section hidden flex-1 flex flex-col bg-slate-950">
+        <!-- 內部系統 Topbar -->
+        <header class="border-b border-slate-800 bg-slate-900 px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-9 h-9 rounded-lg bg-sky-600 flex items-center justify-center font-bold text-white text-lg">
+                    37
+                </div>
+                <span class="font-bold text-lg text-white">3789百方 管理後台</span>
+            </div>
 
-      <div class="total-box">
-        <div class="total-row"><span>實際施工總才數：</span><span id="txtActualSqft">0 才</span></div>
-        <div class="total-row"><span>貼紙計費總才數 (含損耗)：</span><span id="txtBillSqft">0 才</span></div>
-        <div class="total-row"><span>未稅總價：</span><span id="txtSubtotal">$0</span></div>
-        <div class="total-row"><span>營業稅 (5%)：</span><span id="txtTax">$0</span></div>
-        <div class="total-row grand-total"><span>含稅報價金額：</span><span id="txtGrandTotal">$0</span></div>
-      </div>
-    </div>
-  </main>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
+                    <div class="w-7 h-7 rounded-full bg-sky-500 flex items-center justify-center font-bold text-white text-xs" id="user-avatar">
+                        汪
+                    </div>
+                    <span class="text-sm font-medium text-slate-200" id="user-display-name">汪政均 (系統管理者)</span>
+                </div>
+                <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-400 p-2 rounded-lg transition" title="登出">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i>
+                </button>
+            </div>
+        </header>
 
-  <!-- 第三階段：後台單價管理頁面 -->
-  <main id="viewAdmin" style="display: none;">
-    <div class="card">
-      <div class="card-title">
-        ⚙️ 後台單價與基本價設定
-        <button class="nav-btn" onclick="closeAdmin()">返回前台報價</button>
-      </div>
-      <div id="adminPriceForms"></div>
-      <button class="btn-primary" onclick="saveAdminPrices()">💾 儲存並更新所有價格資料</button>
-    </div>
-  </main>
-</div>
+        <!-- 內部主體內容 -->
+        <div class="flex-1 flex overflow-hidden">
+            <!-- 側邊欄 Sidebar -->
+            <aside class="w-64 border-r border-slate-800 bg-slate-900/50 p-4 hidden md:flex flex-col gap-2">
+                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-sky-600 text-white font-medium">
+                    <i class="fa-solid fa-chart-pie w-5"></i> 控制台
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition">
+                    <i class="fa-solid fa-file-invoice-dollar w-5"></i> 報價單模擬器
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition">
+                    <i class="fa-solid fa-boxes-stacked w-5"></i> 板材與材質設定
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition">
+                    <i class="fa-solid fa-map-location-dot w-5"></i> 差旅與施工規範
+                </a>
+                <div class="mt-auto border-t border-slate-800 pt-4">
+                    <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition">
+                        <i class="fa-solid fa-gear w-5"></i> 系統設定
+                    </a>
+                </div>
+            </aside>
 
-<script>
-// 1. 預設價格矩陣
-const DEFAULT_PRICES = {
-  materials: {
-    cash:     { oilMatte: 16.0, milkMatte: 23.0, board5mmStd: 14.0, board5mm300: 16.0, board5mmGloss: 19.0, install: 15.0, installMin: 1800, remove: 10.0, removeMin: 1200, waste: 8.0 },
-    m5k:      { oilMatte: 15.9, milkMatte: 22.0, board5mmStd: 12.0, board5mm300: 14.0, board5mmGloss: 18.0, install: 14.0, installMin: 1800, remove: 10.0, removeMin: 1000, waste: 6.0 },
-    m30k_1:  { oilMatte: 15.7, milkMatte: 19.3, board5mmStd: 12.0, board5mm300: 14.0, board5mmGloss: 18.0, install: 14.0, installMin: 1800, remove: 10.0, removeMin: 1000, waste: 6.0 },
-    m30k_2:  { oilMatte: 15.5, milkMatte: 18.9, board5mmStd: 12.0, board5mm300: 14.0, board5mmGloss: 18.0, install: 14.0, installMin: 1800, remove: 10.0, removeMin: 1000, waste: 6.0 },
-    m100k:   { oilMatte: 15.0, milkMatte: 18.4, board5mmStd: 12.0, board5mm300: 14.0, board5mmGloss: 18.0, install: 14.0, installMin: 1800, remove: 10.0, removeMin: 1000, waste: 6.0 }
-  },
-  stands: {
-    cash: { s150: 170, s180: 205, s225: 250 },
-    member: { s150: 160, s180: 195, s225: 240 }
-  }
-};
+            <!-- 主要操作區 -->
+            <main class="flex-1 overflow-y-auto p-6 space-y-6">
+                <!-- 歡迎 Banner -->
+                <div class="p-6 rounded-2xl bg-gradient-to-r from-sky-900/40 to-indigo-900/40 border border-sky-500/20 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-1" id="welcome-message">歡迎回到 3789百方 管理系統！</h2>
+                        <p class="text-slate-400 text-sm">今日系統運作正常，所有材料單價與物流加價規則已更新至最新狀態。</p>
+                    </div>
+                    <button class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-sm font-medium transition shadow">
+                        + 新增報價單
+                    </button>
+                </div>
 
-let db = JSON.parse(localStorage.getItem('board_app_prices')) || DEFAULT_PRICES;
+                <!-- 數據概覽 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
+                        <div class="text-slate-400 text-xs font-medium mb-1">本月累計報價</div>
+                        <div class="text-2xl font-bold text-white">NT$ 485,000</div>
+                        <div class="text-emerald-400 text-xs mt-2"><i class="fa-solid fa-arrow-trend-up"></i> +12.5% 較上月</div>
+                    </div>
+                    <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
+                        <div class="text-slate-400 text-xs font-medium mb-1">待處理單據</div>
+                        <div class="text-2xl font-bold text-sky-400">12 件</div>
+                        <div class="text-slate-500 text-xs mt-2">包含 3 筆展覽大圖急件</div>
+                    </div>
+                    <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
+                        <div class="text-slate-400 text-xs font-medium mb-1">常用主力材質</div>
+                        <div class="text-2xl font-bold text-white">5mm 合成板</div>
+                        <div class="text-slate-500 text-xs mt-2">搭配油性白背膠霧膜</div>
+                    </div>
+                    <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
+                        <div class="text-slate-400 text-xs font-medium mb-1">出車運費免加價區</div>
+                        <div class="text-2xl font-bold text-indigo-400">雙北市區</div>
+                        <div class="text-slate-500 text-xs mt-2">三重公司出車直達</div>
+                    </div>
+                </div>
 
-// 初始化檢查登入狀態
-window.onload = function() {
-  const loggedUser = localStorage.getItem('board_app_session');
-  if (loggedUser) {
-    showAppScreen(loggedUser);
-  }
-};
-
-// 切換登入 / 註冊頁籤
-function switchAuthTab(tab) {
-  if (tab === 'login') {
-    document.getElementById('btnTabLogin').classList.add('active');
-    document.getElementById('btnTabRegister').classList.remove('active');
-    document.getElementById('formLogin').style.display = 'block';
-    document.getElementById('formRegister').style.display = 'none';
-  } else {
-    document.getElementById('btnTabRegister').classList.add('active');
-    document.getElementById('btnTabLogin').classList.remove('active');
-    document.getElementById('formRegister').style.display = 'block';
-    document.getElementById('formLogin').style.display = 'none';
-  }
-}
-
-// 登入處理
-function handleLogin(e) {
-  e.preventDefault();
-  const u = document.getElementById('loginUser').value.trim();
-  const p = document.getElementById('loginPass').value.trim();
-
-  let users = JSON.parse(localStorage.getItem('board_app_users')) || { 'admin': 'admin888' };
-  
-  if (users[u] && users[u] === p) {
-    localStorage.setItem('board_app_session', u);
-    showAppScreen(u);
-  } else {
-    alert('帳號或密碼錯誤！');
-  }
-}
-
-// 註冊處理
-function handleRegister(e) {
-  e.preventDefault();
-  const u = document.getElementById('regUser').value.trim();
-  const p = document.getElementById('regPass').value.trim();
-
-  let users = JSON.parse(localStorage.getItem('board_app_users')) || { 'admin': 'admin888' };
-  if (users[u]) {
-    alert('該帳號已存在！');
-    return;
-  }
-
-  users[u] = p;
-  localStorage.setItem('board_app_users', JSON.stringify(users));
-  localStorage.setItem('board_app_session', u);
-  alert('註冊成功並已登入！');
-  showAppScreen(u);
-}
-
-// 登出
-function handleLogout() {
-  localStorage.removeItem('board_app_session');
-  document.getElementById('viewApp').style.display = 'none';
-  document.getElementById('viewAdmin').style.display = 'none';
-  document.getElementById('viewAuth').style.display = 'flex';
-}
-
-// 進入應用系統
-let segmentCount = 0;
-function showAppScreen(username) {
-  document.getElementById('viewAuth').style.display = 'none';
-  document.getElementById('viewApp').style.display = 'block';
-  document.getElementById('currentUserDisplay').innerText = `👤 ${username}`;
-
-  if (segmentCount === 0) {
-    addSegmentRow(240, 90);
-    addSegmentRow(240, 90);
-  }
-  calculate();
-}
-
-function addSegmentRow(defaultH = 240, defaultW = 90) {
-  segmentCount++;
-  const container = document.getElementById('segmentContainer');
-  const div = document.createElement('div');
-  div.className = 'segment-row';
-  div.id = `segRow_${segmentCount}`;
-  div.innerHTML = `
-    <span style="font-weight:bold; color:var(--text-muted); width:45px;">第${segmentCount}段</span>
-    <input type="number" placeholder="高(cm)" value="${defaultH}" class="seg-h" oninput="calculate()">
-    <span>x</span>
-    <input type="number" placeholder="寬(cm)" value="${defaultW}" class="seg-w" oninput="calculate()">
-    <button class="btn-icon btn-danger" onclick="removeSegmentRow(${segmentCount})">✕</button>
-  `;
-  container.appendChild(div);
-  calculate();
-}
-
-function removeSegmentRow(id) {
-  const row = document.getElementById(`segRow_${id}`);
-  if (row) {
-    row.remove();
-    calculate();
-  }
-}
-
-// 精算邏輯
-function calculate() {
-  const clientKey = document.getElementById('clientType').value;
-  const matKey = document.getElementById('materialType').value;
-  const priceConfig = db.materials[clientKey];
-
-  const hInputs = document.querySelectorAll('.seg-h');
-  const wInputs = document.querySelectorAll('.seg-w');
-  
-  let totalActualSqft = 0;
-  let totalBilledSqft = 0;
-  let segTotalCount = 0;
-  let segmentDetails = [];
-
-  hInputs.forEach((hEl, idx) => {
-    const h = parseFloat(hEl.value) || 0;
-    const w = parseFloat(wInputs[idx].value) || 0;
-    if (h > 0 && w > 0) {
-      segTotalCount++;
-      const sqft = (h * w) / 900;
-      totalActualSqft += sqft;
-
-      let billW = w;
-      if (matKey === 'milkMatte' && w <= 110) {
-        billW = 110;
-      }
-      
-      const billedSqftOfSeg = (h * billW) / 900;
-      totalBilledSqft += billedSqftOfSeg;
-
-      segmentDetails.push({ h, w, billW, sqft });
-    }
-  });
-
-  if (matKey === 'oilMatte' && segTotalCount >= 3) {
-    totalBilledSqft = 0;
-    segmentDetails.forEach(s => {
-      let targetW = s.w < 90 ? 90 : s.w; 
-      totalBilledSqft += (s.h * targetW) / 900;
-    });
-  }
-
-  const actualSqftCalc = Math.ceil(totalActualSqft);
-  const billedSqftCalc = Math.ceil(totalBilledSqft);
-
-  const matUnitPrice = priceConfig[matKey];
-  const matCost = billedSqftCalc * matUnitPrice;
-
-  const doInstall = document.getElementById('chkInstall').checked;
-  const doRemove = document.getElementById('chkRemove').checked;
-  const doWaste = document.getElementById('chkWaste').checked;
-
-  let installCost = doInstall ? Math.max(actualSqftCalc * priceConfig.install, priceConfig.installMin) : 0;
-  let removeCost = doRemove ? Math.max(actualSqftCalc * priceConfig.remove, priceConfig.removeMin) : 0;
-  let wasteCost = doWaste ? actualSqftCalc * priceConfig.waste : 0;
-
-  const isMember = clientKey !== 'cash';
-  const standPrices = isMember ? db.stands.member : db.stands.cash;
-  const num150 = parseInt(document.getElementById('stand150').value) || 0;
-  const num180 = parseInt(document.getElementById('stand180').value) || 0;
-  const num225 = parseInt(document.getElementById('stand225').value) || 0;
-
-  const standCost = (num150 * standPrices.s150) + (num180 * standPrices.s180) + (num225 * standPrices.s225);
-
-  const subtotal = matCost + installCost + removeCost + wasteCost + standCost;
-  const tax = Math.round(subtotal * 0.05);
-  const grandTotal = subtotal + tax;
-
-  const matNames = {
-    oilMatte: '油白霧貼紙+背板',
-    milkMatte: '乳白霧貼紙+背板',
-    board5mmStd: '5MM高優質合成版',
-    board5mm300: '5MM 300CM合成版',
-    board5mmGloss: '5MM亮面合成版'
-  };
-
-  let html = `<tr><td>${matNames[matKey]}</td><td class="text-center">${billedSqftCalc} 才</td><td class="text-right">$${matUnitPrice}</td><td class="text-right">$${Math.round(matCost).toLocaleString()}</td></tr>`;
-
-  if (doInstall) html += `<tr><td>現場施工費 (基本價$${priceConfig.installMin})</td><td class="text-center">${actualSqftCalc} 才</td><td class="text-right">$${priceConfig.install}</td><td class="text-right">$${Math.round(installCost).toLocaleString()}</td></tr>`;
-  if (doRemove) html += `<tr><td>活動撤場費 (基本價$${priceConfig.removeMin})</td><td class="text-center">${actualSqftCalc} 才</td><td class="text-right">$${priceConfig.remove}</td><td class="text-right">$${Math.round(removeCost).toLocaleString()}</td></tr>`;
-  if (doWaste) html += `<tr><td>廢棄物清運費</td><td class="text-center">${actualSqftCalc} 才</td><td class="text-right">$${priceConfig.waste}</td><td class="text-right">$${Math.round(wasteCost).toLocaleString()}</td></tr>`;
-  if (standCost > 0) html += `<tr><td>L型鐵腳架支援 (150/180/225cm)</td><td class="text-center">-</td><td class="text-right">-</td><td class="text-right">$${standCost.toLocaleString()}</td></tr>`;
-
-  document.getElementById('quoteDetailTable').innerHTML = html;
-  document.getElementById('txtActualSqft').innerText = `${actualSqftCalc} 才`;
-  document.getElementById('txtBillSqft').innerText = `${billedSqftCalc} 才`;
-  document.getElementById('txtSubtotal').innerText = `$${Math.round(subtotal).toLocaleString()}`;
-  document.getElementById('txtTax').innerText = `$${tax.toLocaleString()}`;
-  document.getElementById('txtGrandTotal').innerText = `$${Math.round(grandTotal).toLocaleString()}`;
-}
-
-// 後台管理
-function openAdmin() {
-  document.getElementById('viewApp').style.display = 'none';
-  document.getElementById('viewAdmin').style.display = 'block';
-  renderAdminForm();
-}
-
-function closeAdmin() {
-  document.getElementById('viewAdmin').style.display = 'none';
-  document.getElementById('viewApp').style.display = 'block';
-  calculate();
-}
-
-function renderAdminForm() {
-  const container = document.getElementById('adminPriceForms');
-  let html = '';
-  const clientLabels = {
-    cash: '現金牌價', m5k: '會員 (五千牌價)', m30k_1: '會員 (三萬牌價 - 第一級)', m30k_2: '會員 (三萬牌價 - 第二級)', m100k: '會員 (十萬牌價)'
-  };
-
-  for (let key in db.materials) {
-    const item = db.materials[key];
-    html += `
-      <div style="border-bottom: 1px solid var(--card-border); padding-bottom: 10px; margin-bottom: 10px;">
-        <h4 style="color:var(--accent-gold); margin:6px 0;">${clientLabels[key]}</h4>
-        <div class="row">
-          <div class="col"><label>油白霧</label><input type="number" step="0.1" id="adm_${key}_oilMatte" value="${item.oilMatte}"></div>
-          <div class="col"><label>乳白霧</label><input type="number" step="0.1" id="adm_${key}_milkMatte" value="${item.milkMatte}"></div>
-          <div class="col"><label>5MM高優質</label><input type="number" step="0.1" id="adm_${key}_board5mmStd" value="${item.board5mmStd}"></div>
-          <div class="col"><label>5MM 300CM</label><input type="number" step="0.1" id="adm_${key}_board5mm300" value="${item.board5mm300}"></div>
-          <div class="col"><label>5MM亮面</label><input type="number" step="0.1" id="adm_${key}_board5mmGloss" value="${item.board5mmGloss}"></div>
+                <!-- 模擬功能區域 -->
+                <div class="p-6 rounded-2xl border border-slate-800 bg-slate-900">
+                    <h3 class="text-lg font-bold text-white mb-4">最新報價記錄</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-slate-300">
+                            <thead class="bg-slate-800/60 text-slate-400 uppercase text-xs">
+                                <tr>
+                                    <th class="px-4 py-3">單號</th>
+                                    <th class="px-4 py-3">專案名稱</th>
+                                    <th class="px-4 py-3">施工地點</th>
+                                    <th class="px-4 py-3">預估金額</th>
+                                    <th class="px-4 py-3">狀態</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800">
+                                <tr>
+                                    <td class="px-4 py-3 font-mono text-sky-400">#QU-202609-01</td>
+                                    <td class="px-4 py-3 text-white font-medium">南港展覽館一館 展覽背板施工</td>
+                                    <td class="px-4 py-3">台北市南港區</td>
+                                    <td class="px-4 py-3">NT$ 38,500</td>
+                                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">已確認</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-mono text-sky-400">#QU-202609-02</td>
+                                    <td class="px-4 py-3 text-white font-medium">世貿一館 快閃店背板組裝</td>
+                                    <td class="px-4 py-3">台北市信義區</td>
+                                    <td class="px-4 py-3">NT$ 22,000</td>
+                                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20">估價中</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
         </div>
-        <div class="row">
-          <div class="col"><label>施工費/才</label><input type="number" id="adm_${key}_install" value="${item.install}"></div>
-          <div class="col"><label>施工基本價</label><input type="number" id="adm_${key}_installMin" value="${item.installMin}"></div>
-          <div class="col"><label>撤場費/才</label><input type="number" id="adm_${key}_remove" value="${item.remove}"></div>
-          <div class="col"><label>撤場基本價</label><input type="number" id="adm_${key}_removeMin" value="${item.removeMin}"></div>
-          <div class="col"><label>廢棄物/才</label><input type="number" id="adm_${key}_waste" value="${item.waste}"></div>
-        </div>
-      </div>
-    `;
-  }
-
-  html += `
-    <h4 style="color:var(--accent-gold); margin:10px 0;">鐵腳架單價設定</h4>
-    <div class="row">
-      <div class="col"><label>現金 - 150cm</label><input type="number" id="adm_stand_cash_150" value="${db.stands.cash.s150}"></div>
-      <div class="col"><label>現金 - 180cm</label><input type="number" id="adm_stand_cash_180" value="${db.stands.cash.s180}"></div>
-      <div class="col"><label>現金 - 225cm</label><input type="number" id="adm_stand_cash_225" value="${db.stands.cash.s225}"></div>
     </div>
-    <div class="row">
-      <div class="col"><label>會員 - 150cm</label><input type="number" id="adm_stand_member_150" value="${db.stands.member.s150}"></div>
-      <div class="col"><label>會員 - 180cm</label><input type="number" id="adm_stand_member_180" value="${db.stands.member.s180}"></div>
-      <div class="col"><label>會員 - 225cm</label><input type="number" id="adm_stand_member_225" value="${db.stands.member.s225}"></div>
-    </div>
-  `;
 
-  container.innerHTML = html;
-}
+    <!-- 頁尾 Footer -->
+    <footer class="border-t border-slate-800 bg-slate-900 py-4 text-center text-xs text-slate-500">
+        Professional Cloud Backboard Quotation Simulator © 2026 3789百方. All rights reserved.
+    </footer>
 
-function saveAdminPrices() {
-  for (let key in db.materials) {
-    db.materials[key].oilMatte = parseFloat(document.getElementById(`adm_${key}_oilMatte`).value);
-    db.materials[key].milkMatte = parseFloat(document.getElementById(`adm_${key}_milkMatte`).value);
-    db.materials[key].board5mmStd = parseFloat(document.getElementById(`adm_${key}_board5mmStd`).value);
-    db.materials[key].board5mm300 = parseFloat(document.getElementById(`adm_${key}_board5mm300`).value);
-    db.materials[key].board5mmGloss = parseFloat(document.getElementById(`adm_${key}_board5mmGloss`).value);
-    
-    db.materials[key].install = parseFloat(document.getElementById(`adm_${key}_install`).value);
-    db.materials[key].installMin = parseFloat(document.getElementById(`adm_${key}_installMin`).value);
-    db.materials[key].remove = parseFloat(document.getElementById(`adm_${key}_remove`).value);
-    db.materials[key].removeMin = parseFloat(document.getElementById(`adm_${key}_removeMin`).value);
-    db.materials[key].waste = parseFloat(document.getElementById(`adm_${key}_waste`).value);
-  }
+    <!-- ==================== 單頁應用切換腳本 (JavaScript) ==================== -->
+    <script>
+        // 頁面切換邏輯
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+            window.scrollTo(0, 0);
+        }
 
-  db.stands.cash.s150 = parseFloat(document.getElementById('adm_stand_cash_150').value);
-  db.stands.cash.s180 = parseFloat(document.getElementById('adm_stand_cash_180').value);
-  db.stands.cash.s225 = parseFloat(document.getElementById('adm_stand_cash_225').value);
+        // 登入邏輯處理
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim() || '使用者';
+            
+            // 更新系統內的顯示名稱與頭像
+            document.getElementById('user-display-name').textContent = `${username} (系統管理者)`;
+            document.getElementById('welcome-message').textContent = `歡迎回到 3789百方，${username}！`;
+            document.getElementById('user-avatar').textContent = username.charAt(0);
 
-  db.stands.member.s150 = parseFloat(document.getElementById('adm_stand_member_150').value);
-  db.stands.member.s180 = parseFloat(document.getElementById('adm_stand_member_180').value);
-  db.stands.member.s225 = parseFloat(document.getElementById('adm_stand_member_225').value);
+            // 切換至系統主頁
+            navigateTo('page-dashboard');
+        }
 
-  localStorage.setItem('board_app_prices', JSON.stringify(db));
-  alert('單價已成功更新！');
-  closeAdmin();
-}
-
-// 註冊 Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').then(reg => {
-      console.log('ServiceWorker 註冊成功:', reg.scope);
-    }).catch(err => {
-      console.log('ServiceWorker 註冊失敗:', err);
-    });
-  });
-}
-</script>
+        // 登出邏輯處理
+        function handleLogout() {
+            if (confirm('確定要登出系統嗎？')) {
+                navigateTo('page-landing');
+            }
+        }
+    </script>
 </body>
 </html>
