@@ -64,34 +64,6 @@
                 <button onclick="navigateTo('page-login')" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-semibold text-lg shadow-lg shadow-sky-500/25 transition duration-200">
                     立即體驗系統
                 </button>
-                <a href="#features" class="px-8 py-3.5 rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-800 text-slate-300 font-semibold text-lg transition duration-200">
-                    了解更多功能
-                </a>
-            </div>
-
-            <!-- 特色卡片 -->
-            <div id="features" class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mt-20 text-left">
-                <div class="p-6 rounded-2xl border border-slate-800 bg-slate-800/40">
-                    <div class="w-12 h-12 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center text-xl mb-4">
-                        <i class="fa-solid fa-calculator"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">自動化耗損換算</h3>
-                    <p class="text-slate-400 text-sm">輸入尺寸自動試算才數與基本耗損，降低人工報價誤差與成本風險。</p>
-                </div>
-                <div class="p-6 rounded-2xl border border-slate-800 bg-slate-800/40">
-                    <div class="w-12 h-12 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4">
-                        <i class="fa-solid fa-truck-ramp-box"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">場地施工與進退場</h3>
-                    <p class="text-slate-400 text-sm">預設展覽館及雙北區域運費規範，自動判斷差旅與搬運加價條件。</p>
-                </div>
-                <div class="p-6 rounded-2xl border border-slate-800 bg-slate-800/40">
-                    <div class="w-12 h-12 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4">
-                        <i class="fa-solid fa-database"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">雲端離線持久化</h3>
-                    <p class="text-slate-400 text-sm">支援本地端快取與離線報價試算，資料不遺失，隨時隨地輕鬆調閱。</p>
-                </div>
             </div>
         </main>
     </div>
@@ -118,7 +90,7 @@
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
                             <i class="fa-solid fa-user"></i>
                         </span>
-                        <input type="text" id="username" value="汪政均" required class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-white placeholder-slate-500 transition">
+                        <input type="text" id="username" value="汪政均" required class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-sky-500 text-white transition">
                     </div>
                 </div>
 
@@ -128,46 +100,32 @@
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
                             <i class="fa-solid fa-lock"></i>
                         </span>
-                        <input type="password" id="password" value="••••••••" required class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-white placeholder-slate-500 transition">
+                        <input type="password" id="password" value="••••••••" required class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-sky-500 text-white transition">
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between text-sm">
-                    <label class="flex items-center text-slate-400 cursor-pointer">
-                        <input type="checkbox" checked class="rounded border-slate-700 bg-slate-900 text-sky-500 focus:ring-sky-500">
-                        <span class="ml-2">記住我的登入</span>
-                    </label>
-                    <a href="#" class="text-sky-400 hover:underline">忘記密碼？</a>
-                </div>
-
-                <button type="submit" class="w-full py-3 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-sky-500/25 transition duration-200">
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 text-white font-semibold rounded-xl shadow-lg shadow-sky-500/25 transition duration-200">
                     進入系統內部 <i class="fa-solid fa-right-to-bracket ml-1"></i>
                 </button>
             </form>
-
-            <div class="mt-6 text-center text-xs text-slate-500">
-                預設管理者帳號已填入，可以直接點擊登入。
-            </div>
         </div>
     </div>
 
     <!-- ==================== 3. 系統內部主頁 (System Dashboard) ==================== -->
     <div id="page-dashboard" class="page-section hidden flex-1 flex flex-col bg-slate-950">
         <!-- 內部系統 Topbar -->
-        <header class="border-b border-slate-800 bg-slate-900 px-6 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-4">
+        <header class="border-b border-slate-800 bg-slate-900 px-4 sm:px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-lg bg-sky-600 flex items-center justify-center font-bold text-white text-lg">
                     37
                 </div>
-                <span class="font-bold text-lg text-white">3789百方 管理後台</span>
+                <span class="font-bold text-base sm:text-lg text-white">3789百方 管理後台</span>
             </div>
 
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-3 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
-                    <div class="w-7 h-7 rounded-full bg-sky-500 flex items-center justify-center font-bold text-white text-xs" id="user-avatar">
-                        汪
-                    </div>
-                    <span class="text-sm font-medium text-slate-200" id="user-display-name">汪政均 (系統管理者)</span>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
+                    <div class="w-6 h-6 rounded-full bg-sky-500 flex items-center justify-center font-bold text-white text-xs" id="user-avatar">汪</div>
+                    <span class="text-xs sm:text-sm font-medium text-slate-200" id="user-display-name">汪政均</span>
                 </div>
                 <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-400 p-2 rounded-lg transition" title="登出">
                     <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i>
@@ -179,138 +137,279 @@
         <div class="flex-1 flex overflow-hidden">
             <!-- 側邊欄 Sidebar -->
             <aside class="w-64 border-r border-slate-800 bg-slate-900/50 p-4 hidden md:flex flex-col gap-2">
-                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-sky-600 text-white font-medium">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item flex items-center gap-3 px-4 py-2.5 rounded-xl bg-sky-600 text-white font-medium w-full text-left">
                     <i class="fa-solid fa-chart-pie w-5"></i> 控制台
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition">
-                    <i class="fa-solid fa-file-invoice-dollar w-5"></i> 報價單模擬器
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition">
-                    <i class="fa-solid fa-boxes-stacked w-5"></i> 板材與材質設定
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition">
-                    <i class="fa-solid fa-map-location-dot w-5"></i> 差旅與施工規範
-                </a>
-                <div class="mt-auto border-t border-slate-800 pt-4">
-                    <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition">
-                        <i class="fa-solid fa-gear w-5"></i> 系統設定
-                    </a>
-                </div>
+                </button>
+                <button onclick="switchTab('quote')" id="nav-quote" class="nav-item flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition w-full text-left">
+                    <i class="fa-solid fa-calculator w-5"></i> 施工背板報價系統
+                </button>
             </aside>
 
-            <!-- 主要操作區 -->
-            <main class="flex-1 overflow-y-auto p-6 space-y-6">
-                <!-- 歡迎 Banner -->
-                <div class="p-6 rounded-2xl bg-gradient-to-r from-sky-900/40 to-indigo-900/40 border border-sky-500/20 flex justify-between items-center">
-                    <div>
-                        <h2 class="text-2xl font-bold text-white mb-1" id="welcome-message">歡迎回到 3789百方 管理系統！</h2>
-                        <p class="text-slate-400 text-sm">今日系統運作正常，所有材料單價與物流加價規則已更新至最新狀態。</p>
+            <!-- 主要內容區塊 -->
+            <main class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+                <!-- 儀表板視圖 (Dashboard View) -->
+                <div id="view-dashboard" class="space-y-6">
+                    <div class="p-6 rounded-2xl bg-gradient-to-r from-sky-900/40 to-indigo-900/40 border border-sky-500/20 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-bold text-white mb-1" id="welcome-message">歡迎回到 3789百方 管理系統！</h2>
+                            <p class="text-slate-400 text-sm">今日系統運作正常，所有材料單價與物流加價規則已更新至最新狀態。</p>
+                        </div>
+                        <button onclick="switchTab('quote')" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-sky-600/30 flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> 新增報價單
+                        </button>
                     </div>
-                    <button class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-sm font-medium transition shadow">
-                        + 新增報價單
-                    </button>
-                </div>
 
-                <!-- 數據概覽 -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
-                        <div class="text-slate-400 text-xs font-medium mb-1">本月累計報價</div>
-                        <div class="text-2xl font-bold text-white">NT$ 485,000</div>
-                        <div class="text-emerald-400 text-xs mt-2"><i class="fa-solid fa-arrow-trend-up"></i> +12.5% 較上月</div>
-                    </div>
-                    <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
-                        <div class="text-slate-400 text-xs font-medium mb-1">待處理單據</div>
-                        <div class="text-2xl font-bold text-sky-400">12 件</div>
-                        <div class="text-slate-500 text-xs mt-2">包含 3 筆展覽大圖急件</div>
-                    </div>
-                    <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
-                        <div class="text-slate-400 text-xs font-medium mb-1">常用主力材質</div>
-                        <div class="text-2xl font-bold text-white">5mm 合成板</div>
-                        <div class="text-slate-500 text-xs mt-2">搭配油性白背膠霧膜</div>
-                    </div>
-                    <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
-                        <div class="text-slate-400 text-xs font-medium mb-1">出車運費免加價區</div>
-                        <div class="text-2xl font-bold text-indigo-400">雙北市區</div>
-                        <div class="text-slate-500 text-xs mt-2">三重公司出車直達</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
+                            <div class="text-slate-400 text-xs font-medium mb-1">本月累計報價</div>
+                            <div class="text-2xl font-bold text-white">NT$ 485,000</div>
+                        </div>
+                        <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
+                            <div class="text-slate-400 text-xs font-medium mb-1">待處理單據</div>
+                            <div class="text-2xl font-bold text-sky-400">12 件</div>
+                        </div>
+                        <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
+                            <div class="text-slate-400 text-xs font-medium mb-1">常用主力材質</div>
+                            <div class="text-2xl font-bold text-white">5mm 合成板</div>
+                        </div>
+                        <div class="p-5 rounded-xl border border-slate-800 bg-slate-900">
+                            <div class="text-slate-400 text-xs font-medium mb-1">出車運費免加價區</div>
+                            <div class="text-2xl font-bold text-indigo-400">雙北市區</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 模擬功能區域 -->
-                <div class="p-6 rounded-2xl border border-slate-800 bg-slate-900">
-                    <h3 class="text-lg font-bold text-white mb-4">最新報價記錄</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-slate-300">
-                            <thead class="bg-slate-800/60 text-slate-400 uppercase text-xs">
-                                <tr>
-                                    <th class="px-4 py-3">單號</th>
-                                    <th class="px-4 py-3">專案名稱</th>
-                                    <th class="px-4 py-3">施工地點</th>
-                                    <th class="px-4 py-3">預估金額</th>
-                                    <th class="px-4 py-3">狀態</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-800">
-                                <tr>
-                                    <td class="px-4 py-3 font-mono text-sky-400">#QU-202609-01</td>
-                                    <td class="px-4 py-3 text-white font-medium">南港展覽館一館 展覽背板施工</td>
-                                    <td class="px-4 py-3">台北市南港區</td>
-                                    <td class="px-4 py-3">NT$ 38,500</td>
-                                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">已確認</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 font-mono text-sky-400">#QU-202609-02</td>
-                                    <td class="px-4 py-3 text-white font-medium">世貿一館 快閃店背板組裝</td>
-                                    <td class="px-4 py-3">台北市信義區</td>
-                                    <td class="px-4 py-3">NT$ 22,000</td>
-                                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20">估價中</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <!-- 報價單系統視圖 (Quote Builder View) -->
+                <div id="view-quote" class="hidden space-y-6 max-w-5xl mx-auto">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-wrench text-sky-500"></i> 施工背板報價系統
+                        </h2>
+                        <button onclick="switchTab('dashboard')" class="text-slate-400 hover:text-white text-sm">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> 返回主頁
+                        </button>
+                    </div>
+
+                    <!-- 1. 類別與材質 -->
+                    <div class="p-6 rounded-2xl border border-slate-800 bg-slate-900/90 space-y-4">
+                        <h3 class="text-lg font-bold text-amber-500">1. 客戶類別與背板材質</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">客戶類別 (決定價格層級)</label>
+                                <select id="client-type" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white">
+                                    <option value="cash">現金牌價</option>
+                                    <option value="partner">長期合作廠商</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">背板 / 貼紙材質</label>
+                                <select id="material-type" onchange="calculateQuote()" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white">
+                                    <option value="16">油白霧 (5mm合成板+油性白背膠霧膜)</option>
+                                    <option value="18">乳白霧 (5mm合成板+乳性白背膠霧膜)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. 尺寸與段數 -->
+                    <div class="p-6 rounded-2xl border border-slate-800 bg-slate-900/90 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-bold text-amber-500">2. 背板尺寸段數 (高 x 寬 cm)</h3>
+                            <button onclick="addSegment()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs text-slate-200">
+                                + 增加段數
+                            </button>
+                        </div>
+                        <div class="text-xs text-sky-400 bg-sky-950/40 p-2.5 rounded-lg border border-sky-800/40">
+                            💡 系統會自動精算才數與貼紙損耗才數
+                        </div>
+                        <div id="segments-container" class="space-y-3">
+                            <!-- 預設兩段 -->
+                        </div>
+                    </div>
+
+                    <!-- 3. 施工與配件 -->
+                    <div class="p-6 rounded-2xl border border-slate-800 bg-slate-900/90 space-y-4">
+                        <h3 class="text-lg font-bold text-amber-500">3. 施工、撤場與配件費用</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 border-b border-slate-800 pb-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="inc-install" checked onchange="calculateQuote()" class="rounded bg-slate-950 border-slate-700 text-sky-500">
+                                <span class="text-sm">包含施工費 (基本$1800)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="inc-dismantle" checked onchange="calculateQuote()" class="rounded bg-slate-950 border-slate-700 text-sky-500">
+                                <span class="text-sm">包含撤場費 (基本$1200)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="inc-waste" checked onchange="calculateQuote()" class="rounded bg-slate-950 border-slate-700 text-sky-500">
+                                <span class="text-sm">廢棄物處理費</span>
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">L鐵架 150CM (個)</label>
+                                <input type="number" id="iron-150" value="0" min="0" oninput="calculateQuote()" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">L鐵架 180CM (個)</label>
+                                <input type="number" id="iron-180" value="0" min="0" oninput="calculateQuote()" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">L鐵架 225CM (個)</label>
+                                <input type="number" id="iron-225" value="0" min="0" oninput="calculateQuote()" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. 報價明細 -->
+                    <div class="p-6 rounded-2xl border border-slate-800 bg-slate-900/90 space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-receipt text-sky-400"></i> 報價明細總覽
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="border-b border-slate-800 text-slate-400 text-xs uppercase">
+                                    <tr>
+                                        <th class="py-2">項目</th>
+                                        <th class="py-2 text-right">數量/才數</th>
+                                        <th class="py-2 text-right">單價</th>
+                                        <th class="py-2 text-right">小計</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="quote-items-body" class="divide-y divide-slate-800/60 text-slate-200">
+                                    <!-- 動態渲染計算數據 -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="border-t border-slate-700 pt-4 flex justify-between items-center text-xl font-bold">
+                            <span class="text-white">總計金額 (未稅)</span>
+                            <span class="text-emerald-400" id="total-price">NT$ 0</span>
+                        </div>
                     </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- 頁尾 Footer -->
-    <footer class="border-t border-slate-800 bg-slate-900 py-4 text-center text-xs text-slate-500">
-        Professional Cloud Backboard Quotation Simulator © 2026 3789百方. All rights reserved.
+    <!-- 頁尾 -->
+    <footer class="border-t border-slate-800 bg-slate-900 py-3 text-center text-xs text-slate-500">
+        Professional Cloud Backboard Quotation Simulator © 2026 3789百方.
     </footer>
 
-    <!-- ==================== 單頁應用切換腳本 (JavaScript) ==================== -->
+    <!-- JavaScript 腳本 -->
     <script>
-        // 頁面切換邏輯
+        // 頁面與切換邏輯
         function navigateTo(pageId) {
-            document.querySelectorAll('.page-section').forEach(section => {
-                section.classList.add('hidden');
-            });
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.remove('hidden');
-            }
-            window.scrollTo(0, 0);
+            document.querySelectorAll('.page-section').forEach(section => section.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
         }
 
-        // 登入邏輯處理
+        function switchTab(tab) {
+            if(tab === 'dashboard') {
+                document.getElementById('view-dashboard').classList.remove('hidden');
+                document.getElementById('view-quote').classList.add('hidden');
+                document.getElementById('nav-dashboard').className = "nav-item flex items-center gap-3 px-4 py-2.5 rounded-xl bg-sky-600 text-white font-medium w-full text-left";
+                document.getElementById('nav-quote').className = "nav-item flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 transition w-full text-left";
+            } else {
+                document.getElementById('view-dashboard').classList.add('hidden');
+                document.getElementById('view-quote').classList.remove('hidden');
+                document.getElementById('nav-quote').className = "nav-item flex items-center gap-3 px-4 py-2.5 rounded-xl bg-sky-600 text-white font-medium w-full text-left";
+                document.getElementById('nav-dashboard').className = "nav-item flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 transition w-full text-left";
+                calculateQuote();
+            }
+        }
+
         function handleLogin(e) {
             e.preventDefault();
             const username = document.getElementById('username').value.trim() || '使用者';
-            
-            // 更新系統內的顯示名稱與頭像
-            document.getElementById('user-display-name').textContent = `${username} (系統管理者)`;
+            document.getElementById('user-display-name').textContent = username;
             document.getElementById('welcome-message').textContent = `歡迎回到 3789百方，${username}！`;
             document.getElementById('user-avatar').textContent = username.charAt(0);
-
-            // 切換至系統主頁
             navigateTo('page-dashboard');
         }
 
-        // 登出邏輯處理
         function handleLogout() {
-            if (confirm('確定要登出系統嗎？')) {
-                navigateTo('page-landing');
-            }
+            if (confirm('確定要登出系統嗎？')) navigateTo('page-landing');
         }
+
+        // 背板計算試算邏輯
+        let segments = [{ h: 240, w: 90 }, { h: 240, w: 90 }];
+
+        function renderSegments() {
+            const container = document.getElementById('segments-container');
+            container.innerHTML = '';
+            segments.forEach((seg, idx) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center gap-3 bg-slate-950 p-2.5 rounded-xl border border-slate-800';
+                div.innerHTML = `
+                    <span class="text-xs text-slate-400 font-bold w-12">第 ${idx + 1} 段</span>
+                    <input type="number" value="${seg.h}" oninput="updateSeg(${idx}, 'h', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white text-sm" placeholder="高 (cm)">
+                    <span class="text-slate-500">x</span>
+                    <input type="number" value="${seg.w}" oninput="updateSeg(${idx}, 'w', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white text-sm" placeholder="寬 (cm)">
+                    ${segments.length > 1 ? `<button onclick="removeSegment(${idx})" class="text-rose-400 p-2"><i class="fa-solid fa-xmark"></i></button>` : ''}
+                `;
+                container.appendChild(div);
+            });
+            calculateQuote();
+        }
+
+        function addSegment() {
+            segments.push({ h: 240, w: 90 });
+            renderSegments();
+        }
+
+        function removeSegment(idx) {
+            segments.splice(idx, 1);
+            renderSegments();
+        }
+
+        function updateSeg(idx, field, val) {
+            segments[idx][field] = parseFloat(val) || 0;
+            calculateQuote();
+        }
+
+        function calculateQuote() {
+            let totalCai = 0;
+            segments.forEach(s => {
+                totalCai += Math.ceil((s.h * s.w) / 900);
+            });
+
+            const matUnitPrice = parseInt(document.getElementById('material-type').value) || 16;
+            const matSubtotal = totalCai * matUnitPrice;
+
+            const incInstall = document.getElementById('inc-install').checked;
+            const installFee = incInstall ? Math.max(1800, totalCai * 15) : 0;
+
+            const incDismantle = document.getElementById('inc-dismantle').checked;
+            const dismantleFee = incDismantle ? Math.max(1200, totalCai * 10) : 0;
+
+            const tbody = document.getElementById('quote-items-body');
+            tbody.innerHTML = `
+                <tr>
+                    <td class="py-2.5">背板貼紙輸出 ($${matUnitPrice}/才)</td>
+                    <td class="py-2.5 text-right font-mono">${totalCai} 才</td>
+                    <td class="py-2.5 text-right font-mono">$${matUnitPrice}</td>
+                    <td class="py-2.5 text-right font-mono">$${matSubtotal.toLocaleString()}</td>
+                </tr>
+                ${incInstall ? `
+                <tr>
+                    <td class="py-2.5">現場進場施工費 (基本價$1800)</td>
+                    <td class="py-2.5 text-right font-mono">${totalCai} 才</td>
+                    <td class="py-2.5 text-right font-mono">$15</td>                     <td class="py-2.5 text-right font-mono">$${installFee.toLocaleString()}</td>
+                </tr>` : ''}
+                ${incDismantle ? `
+                <tr>
+                    <td class="py-2.5">活動撤場費 (基本價$1200)</td>
+                    <td class="py-2.5 text-right font-mono">${totalCai} 才</td>
+                    <td class="py-2.5 text-right font-mono">$10</td>                     <td class="py-2.5 text-right font-mono">$${dismantleFee.toLocaleString()}</td>
+                </tr>` : ''}
+            `;
+
+            const grandTotal = matSubtotal + installFee + dismantleFee;
+            document.getElementById('total-price').textContent = `NT$ ${grandTotal.toLocaleString()}`;
+        }
+
+        // 初始化
+        renderSegments();
     </script>
 </body>
 </html>
